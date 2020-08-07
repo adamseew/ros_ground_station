@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
 			                return 0;
 				}
 
-				profiler = new plnr::profiler(_config, _sampler);			
-				size_t config_id = _config->add_configuration(_component, rate);
+				_profiler = new plnr::profiler(_config, _sampler);			
+				size_t config_id = _config->add_configuration(_component, 0);
 				ROS_INFO("config id => %zu", config_id);
 
 				// starting powprof
