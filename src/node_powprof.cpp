@@ -1,3 +1,4 @@
+#include <std_msgs/Bool.h>
 #include <ros/ros.h>
 #include <stdexcept>
 #include <signal.h>
@@ -22,7 +23,7 @@ plnr::component _component("");
 
 bool started = false;
 
-void takeoffCallback(const std_msgs::bool::ConstPtr& msg) {
+void takeoffCallback(const std_msgs::Bool::ConstPtr& msg) {
 
 	if (started) {
 		ROS_INFO("powprofiler already running");
@@ -38,7 +39,7 @@ void takeoffCallback(const std_msgs::bool::ConstPtr& msg) {
 	// testing if the sampler works
 	if (!_sampler->dryrun()) {
 		ROS_ERROR("powprofiler does not work on this architecture");
-	               return 0;
+	    return;
 	}
 
 	_profiler = new plnr::profiler(_config, _sampler);			
@@ -53,7 +54,7 @@ void takeoffCallback(const std_msgs::bool::ConstPtr& msg) {
 	started = true;
 }
 
-void landedCallback(const std_msgs::bool::ConstPtr& msg) {
+void landedCallback(const std_msgs::Bool::ConstPtr& msg) {
 	if (!started) {
 		ROS_INFO("powprof not yet started");
 		return;
@@ -78,8 +79,8 @@ int main(int argc, char **argv) {
 
 	ROS_INFO("powprof node");
 
-	ros::Subscriber sub = n.subscribe("/ros_ground_station/takeoff", 1000, takeoffCallback);
-	ros::Subscriber sub = n.subscribe("/ros_ground_station/land", 1000, landedCallback);
+	ros::Subscriber sub1 = nh.subscribe("/ros_ground_station/takeoff", 1000, takeoffCallback);
+	ros::Subscriber sub2 = nh.subscribe("/ros_ground_station/land", 1000, landedCallback);
 
 	while (ros::ok()) {
 		ros::spinOnce();
